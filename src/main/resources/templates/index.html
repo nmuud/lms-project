@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <style>
+        .home__slider {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .bxslider img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .bx-wrapper .bx-prev, .bx-wrapper .bx-next {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 20px;
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            line-height: 40px;
+            text-align: center;
+        }
+        .bx-wrapper .bx-pager {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .bx-wrapper .bx-pager.bx-default-pager a {
+            background: #999;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+        }
+        .bx-wrapper .bx-pager.bx-default-pager a.active {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+<h1>메인 페이지</h1>
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
+
+<!-- 슬라이더 부분 -->
+<div class="home__slider">
+    <ul class="bxslider">
+        <!-- 메인 이미지 -->
+        <li>
+            <img src="/files/2024/12/09/6b1b831d629e4b948cafac91e8b1da0b.png" alt="메인 이미지">
+        </li>
+        <!-- 배너 리스트 -->
+        <li th:each="banner : ${banners}">
+            <a th:href="${banner.url}" th:target="${banner.target}">
+                <img th:src="${banner.imagePath}" th:alt="${banner.altText}">
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+        $(document).ready(function() {
+            $('.bxslider').bxSlider({
+                auto: false,         // 자동 재생 비활성화
+                pause: 4000,         // 자동 재생 간격
+                speed: 500,          // 슬라이드 애니메이션 속도
+                controls: true,      // 이전/다음 버튼 표시
+                pager: true,         // 하단 점 네비게이션 표시
+                responsive: true     // 반응형 지원
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>배너 등록</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .form-container {
+            margin: auto;
+            width: 80%;
+        }
+
+        .form-container button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+
+<div class="form-container">
+    <h2>배너 관리 - 배너 등록</h2>
+    <form action="/admin/banner/add" method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th>배너명</th>
+                <td><input type="text" name="name" required></td>
+            </tr>
+            <tr>
+                <th>배너 파일</th>
+                <td><input type="file" name="file" accept="image/*" required></td>
+            </tr>
+            <tr>
+                <th>링크 주소</th>
+                <td><input type="url" name="url" required></td>
+            </tr>
+            <tr>
+                <th>오픈 방법</th>
+                <td>
+                    <input type="radio" name="target" value="_self" checked> 현재 창
+                    <input type="radio" name="target" value="_blank"> 새 창
+                </td>
+            </tr>
+            <tr>
+                <th>정렬 순서</th>
+                <td><input type="number" name="sortOrder" required></td>
+            </tr>
+            <tr>
+                <th>공개 여부</th>
+                <td><input type="checkbox" name="visible"> 공개</td>
+            </tr>
+        </table>
+        <button type="submit">배너 등록 하기</button>
+        <button type="button" onclick="location.href='/admin/banner/list.do'">목록 이동</button>
+    </form>
+</div>
+</body>
+</html>

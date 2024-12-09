@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>배너 관리</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            border: solid 1px #000;
+            text-align: center;
+            padding: 8px;
+        }
+        .action-buttons {
+            margin-bottom: 10px;
+        }
+        .pager {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+
+<h1>배너 관리</h1>
+
+<div class="action-buttons">
+    <a href="/admin/banner/add.do">배너 등록</a>
+    <button onclick="deleteSelected()">선택 삭제</button>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th><input type="checkbox" onclick="toggleAll(this)"></th>
+        <th>NO</th>
+        <th>배너명</th>
+        <th>이미지</th>
+        <th>등록일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="banner, iterStat : ${banners}">
+        <td><input type="checkbox" name="selected" th:value="${banner.id}"></td>
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${banner.name}"></td>
+        <td><img th:src="@{${banner.imagePath}}" alt="배너 이미지" style="max-height: 100px;"></td>
+        <td th:text="${banner.regDate}"></td>
+
+        <td>
+            <!-- 수정 및 삭제 버튼 추가 -->
+            <a th:href="@{/admin/banner/edit.do(id=${banner.id})}">수정</a>
+            <button th:onclick="'deleteBanner(' + ${banner.id} + ')'">삭제</button>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+<div class="pager" th:utext="${pager}"></div>
+
+<script>
+    function toggleAll(source) {
+        const checkboxes = document.querySelectorAll('input[name="selected"]');
+        checkboxes.forEach(checkbox => checkbox.checked = source.checked);
+    }
+
+    function deleteSelected() {
+        const selectedIds = Array.from(document.querySelectorAll('input[name="selected"]:checked'))
+            .map(cb => cb.value);
+        if (selectedIds.length === 0) {
+            alert('삭제할 항목을 선택하세요.');
+            return;
+        }
+        if (confirm('선택한 배너를 삭제하시겠습니까?')) {
+            fetch('/admin/banner/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(selectedIds)
+            }).then(() => location.reload())
+              .catch(err => alert('삭제 중 오류가 발생했습니다.'));
+        }
+    }
+        // 추가된 스크립트
+    function deleteBanner(bannerId) {
+        if (confirm('이 배너를 삭제하시겠습니까?')) {
+            fetch('/admin/banner/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify([bannerId]) // 단일 ID를 배열로 전달
+            }).then(() => location.reload())
+              .catch(err => alert('삭제 중 오류가 발생했습니다.'));
+        }
+    }
+
+
+
+</script>
+</body>
+</html>
